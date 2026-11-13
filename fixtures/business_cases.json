@@ -1,17 +1,17 @@
 [
   {
-    "name": "shared_blob",
-    "situation": "不同馆藏共用扫描文件",
-    "observable": "文件去重与实体归并独立"
+    "name": "partial_projection",
+    "situation": "列表省略members",
+    "observable": "未读取与明确空集合不同"
   },
   {
-    "name": "human_split",
-    "situation": "人工拆分之后来源重复投递",
-    "observable": "拆分决定仍有效且旧引用可解释"
+    "name": "version_facets",
+    "situation": "补详情与增量观察版本不同",
+    "observable": "不拼出虚假的完整资源"
   },
   {
-    "name": "renumber",
-    "situation": "新入口改号但旧引用存在",
-    "observable": "引用不悬空，关联证据仍可追查"
+    "name": "reference_conflict",
+    "situation": "成员value与引用冲突且详情403",
+    "observable": "待核而非猜身份或删除"
   }
 ]
