@@ -1,0 +1,147 @@
+{
+  "identity_fields": [
+    "portal",
+    "entry_id"
+  ],
+  "source_records": [
+    {
+      "portal": "old",
+      "entry_id": "A19",
+      "collection": "C-9",
+      "title": "河道调查录",
+      "edition": "初版",
+      "file": "/files/scan-a",
+      "digest": "same-scan"
+    },
+    {
+      "portal": "new",
+      "entry_id": "N31",
+      "collection": "C-9",
+      "title": "河道调查录",
+      "edition": "初版",
+      "file": "/files/scan-a",
+      "digest": "same-scan"
+    },
+    {
+      "portal": "new",
+      "entry_id": "N32",
+      "collection": "C-10",
+      "title": "河道调查录",
+      "edition": "修订本",
+      "file": "/files/scan-b",
+      "digest": "other-scan"
+    },
+    {
+      "portal": "old",
+      "entry_id": "A20",
+      "collection": "C-11",
+      "title": "河道调查录节本",
+      "edition": "节选",
+      "file": "/files/scan-a",
+      "digest": "same-scan"
+    }
+  ],
+  "portal": {
+    "csrf": "form-2026-b"
+  },
+  "routes": {
+    "/feed": {
+      "body": "<!doctype html><html lang='zh'><meta charset='utf-8'><title>来源目录</title><body>\n<article><h2>河道调查录</h2>\n<dl><dt>portal</dt><dd>old</dd><dt>entry_id</dt><dd>A19</dd><dt>collection</dt><dd>C-9</dd><dt>title</dt><dd>河道调查录</dd><dt>edition</dt><dd>初版</dd><dt>file</dt><dd>/files/scan-a</dd><dt>digest</dt><dd>same-scan</dd></dl>\n</article>\n<article><h2>河道调查录</h2>\n<dl><dt>portal</dt><dd>new</dd><dt>entry_id</dt><dd>N31</dd><dt>collection</dt><dd>C-9</dd><dt>title</dt><dd>河道调查录</dd><dt>edition</dt><dd>初版</dd><dt>file</dt><dd>/files/scan-a</dd><dt>digest</dt><dd>same-scan</dd></dl>\n</article>\n<article><h2>河道调查录</h2>\n<dl><dt>portal</dt><dd>new</dd><dt>entry_id</dt><dd>N32</dd><dt>collection</dt><dd>C-10</dd><dt>title</dt><dd>河道调查录</dd><dt>edition</dt><dd>修订本</dd><dt>file</dt><dd>/files/scan-b</dd><dt>digest</dt><dd>other-scan</dd></dl>\n</article>\n<article><h2>河道调查录节本</h2>\n<dl><dt>portal</dt><dd>old</dd><dt>entry_id</dt><dd>A20</dd><dt>collection</dt><dd>C-11</dd><dt>title</dt><dd>河道调查录节本</dd><dt>edition</dt><dd>节选</dd><dt>file</dt><dd>/files/scan-a</dd><dt>digest</dt><dd>same-scan</dd></dl>\n</article>\n<script type=\"application/json\" id=\"source-records\">[{\"portal\": \"old\", \"entry_id\": \"A19\", \"collection\": \"C-9\", \"title\": \"河道调查录\", \"edition\": \"初版\", \"file\": \"/files/scan-a\", \"digest\": \"same-scan\"}, {\"portal\": \"new\", \"entry_id\": \"N31\", \"collection\": \"C-9\", \"title\": \"河道调查录\", \"edition\": \"初版\", \"file\": \"/files/scan-a\", \"digest\": \"same-scan\"}, {\"portal\": \"new\", \"entry_id\": \"N32\", \"collection\": \"C-10\", \"title\": \"河道调查录\", \"edition\": \"修订本\", \"file\": \"/files/scan-b\", \"digest\": \"other-scan\"}, {\"portal\": \"old\", \"entry_id\": \"A20\", \"collection\": \"C-11\", \"title\": \"河道调查录节本\", \"edition\": \"节选\", \"file\": \"/files/scan-a\", \"digest\": \"same-scan\"}]</script></body></html>",
+      "content_type": "text/html; charset=utf-8",
+      "headers": {
+        "ETag": "feed-1"
+      }
+    },
+    "/rate-limited": {
+      "status": 429,
+      "headers": {
+        "Retry-After": "2"
+      },
+      "json": {
+        "error": "quota"
+      }
+    },
+    "/unstable": [
+      {
+        "status": 503,
+        "body": "temporarily unavailable"
+      },
+      {
+        "json": {
+          "items": []
+        }
+      }
+    ],
+    "/range": {
+      "body": "0123456789",
+      "range": true
+    },
+    "/range-ignored": {
+      "body": "0123456789"
+    },
+    "/truncated": {
+      "body": "partial",
+      "truncate": true
+    },
+    "/observations/1": {
+      "json": {
+        "items": [
+          {
+            "portal": "old",
+            "entry_id": "A19",
+            "collection": "C-9",
+            "title": "河道调查录",
+            "edition": "初版",
+            "file": "/files/scan-a",
+            "digest": "same-scan"
+          }
+        ]
+      }
+    },
+    "/observations/2": {
+      "json": {
+        "items": [
+          {
+            "portal": "new",
+            "entry_id": "N31",
+            "collection": "C-9",
+            "title": "河道调查录",
+            "edition": "初版",
+            "file": "/files/scan-a",
+            "digest": "same-scan"
+          }
+        ]
+      }
+    },
+    "/observations/3": {
+      "json": {
+        "items": [
+          {
+            "portal": "new",
+            "entry_id": "N32",
+            "collection": "C-10",
+            "title": "河道调查录",
+            "edition": "修订本",
+            "file": "/files/scan-b",
+            "digest": "other-scan"
+          }
+        ]
+      }
+    },
+    "/observations/4": {
+      "json": {
+        "items": [
+          {
+            "portal": "old",
+            "entry_id": "A20",
+            "collection": "C-11",
+            "title": "河道调查录节本",
+            "edition": "节选",
+            "file": "/files/scan-a",
+            "digest": "same-scan"
+          }
+        ]
+      }
+    }
+  }
+}
