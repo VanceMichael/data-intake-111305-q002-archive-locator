@@ -27,3 +27,16 @@
 ## 领域接入契约
 
 记录外层 tenant、requested_attributes、observation 是本项目采集信封，resource 内层遵循 SCIM 资源结构。attributes 和 excludedAttributes 的投影语义参考 RFC 7644；meta.version 为不透明值。只读取目录，不创建或修改账户，也不计算访问授权。所有用户名均为合成值。
+
+## 目录覆盖视图
+
+`archive_locator.directory.Directory` 在原始采集之上建立只追加的目录查询观察。它不是来源状态的快照，而是对每次查询的覆盖说明。
+
+- **身份**：`(tenant, resource_type, id)`。`userName`、`displayName`、`externalId` 不是身份；改名不会新增资源，不同租户中的同名或相同 `externalId` 也不会自动归并。
+- **查询记录**：每次接入保留请求了哪些属性（`requested` 或 `excluded`）、响应顶层实际出现哪些属性（`present`）、响应状态、URL 与时间。状态的 2xx/非 2xx 与 SCIM Error 结构都保留。
+- **版本 facet**：成功响应按 `meta.version` 分组。`meta.version` 是不透明标识，不作字符串排序，也没有“最新”推断。缺少 `meta.version` 时每次观察单独成 facet，因为无法证明它们属于同一来源状态。
+- **覆盖范围**：同一 facet 内属性取值一致才算 `confirmed_attributes`；取值不一致进入 `conflicted_attributes` 并给出各候选及来源查询。请求过但响应中没有的属性、以及根据投影范围应返回但缺失的属性进入 `unread_attributes`，并区分 `requested_but_absent`、`not_returned`、`not_requested`、`request_scope_unknown`。属性读取从不跨 facet 拼接。
+- **未成功响应**：非 2xx 和 SCIM Error 响应记为 `attempts`，效果是 `unread_attempt`；它们不证明资源被删除，也不构成空集合。
+- **成员关系**：`relations()` 只解释一个 Group facet。`members` 缺失表示未读取，`members: []` 才表示已观察到的空集合。成员的 `$ref` 与 `value` 指向不同资源时状态为 `conflict`，只列出候选而不选边；成员详情尚未读取时为 `pending_target`；`display` 等名称从不用于推断身份。`pending_relations()` 汇总需要补详情的成员与成员属性本身未读取的 Group facet。
+
+`ingest_response()` 接入一次 SCIM HTTP 响应（列表或详情），`fetch_detail()` 可按需发起详情查询并把原始响应同时写入 `Archive`；详情是否与既有观察同版本由响应的 `meta.version` 决定。并发到达的增量观察与补详情各自写入自己的 facet，读取始终在单一 facet 内完成。

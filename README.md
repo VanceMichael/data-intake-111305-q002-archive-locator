@@ -17,6 +17,7 @@ python3 -m unittest discover -s tests -v
 python3 -m build --wheel --no-isolation
 python3 -m compileall -q archive_locator tests
 python3 -m archive_locator demo
+python3 -m archive_locator directory-demo
 ```
 
 演示从空的临时目录启动本地来源，真实完成一次 HTTP 获取及归档，并输出原样记录；结束自动清理。本地测试、编译和演示合计一般不超过十秒，可直接展示，不依赖历史日志。
@@ -34,6 +35,17 @@ python3 -m archive_locator capture --base-url http://127.0.0.1:实际端口 --ar
 ```
 
 归档库只追加来源观察，不用最后一条响应覆盖先前响应。`archive.py` 管理原始内容及完整性，`client.py` 执行一次请求，`decoding.py` 负责来源格式解码，`origin.py` 提供协议演练。业务解释可与原始接收独立演进。
+
+## 目录接入
+
+`archive_locator/directory.py` 按租户、资源类型和来源版本组织 SCIM 目录观察：
+
+```sh
+python3 -m archive_locator directory-report --archive 归档.sqlite3 --directory 目录.sqlite3 \
+  --tenant archive-a --resource-type Groups --id g1 --version 'W/"beta"'
+```
+
+报告分别给出已确认属性、未读取属性、待补成员关系与未成功的查询尝试。资源身份仅由 `(tenant, resource_type, id)` 构成；`meta.version` 是不透明值，多个版本 facet 必须显式指定，读取不会跨 facet 拼接。列表省略 `members` 表示未读取，`members: []` 才是已观察到的空集合；成员 `$ref` 与 `value` 矛盾时待核而不凭名字补齐。`archive_locator.directory.Directory` 也提供 `ingest_response()` 与 `fetch_detail()`，后者按需补详情并把原始响应同步写入归档。
 
 ## 开发资料
 
