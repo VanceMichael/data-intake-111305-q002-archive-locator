@@ -27,3 +27,14 @@
 ## 领域接入契约
 
 记录外层 tenant、requested_attributes、observation 是本项目采集信封，resource 内层遵循 SCIM 资源结构。attributes 和 excludedAttributes 的投影语义参考 RFC 7644；meta.version 为不透明值。只读取目录，不创建或修改账户，也不计算访问授权。所有用户名均为合成值。
+
+## 目录解释口径（archive_locator/directory.py）
+
+目录库独立于原始归档库，只解释采集信封，不回改原始响应。
+
+- 身份键为 `(tenant, resource_type, id)`。资源 `id` 是唯一来源身份：userName 变更只产生一个带新版本的属性观察，不新建资源；displayName、externalId 相同不触发归并；不同租户的相同 ID/externalId 各自独立。
+- 每次观察留存请求属性、实际返回属性与 `meta.version`。请求过但任何观察都未返回的属性是“未读取”；明确返回的空集合（`members: []`）是已确认事实，二者在 `unread_attributes` 与 `group_relationships(members_declared_empty)` 中分别呈现，缺 members 不解释为清空成员。
+- `meta.version` 不透明，只做相等比较，不按字符串或词序判断新旧；无版本观察各自独立成切面。同版本观察在一个 facet 内合并，不同版本 facet 互不拼接，增量重访与按需补详情交错时不会出现跨版本的“完整资源”。
+- 组成员引用可先于成员详情抵达，详情未读时关系为 pending（`member_detail_missing`），详情抵达后自动复核。`$ref` 与 `value` 矛盾时为 pending（`ref_value_conflict`），display 等名字字段不参与身份补齐；只有来源给出一致的新观察才能消解，待补队列只反映各组最近一次成员观察，历史行保留审计。
+- 403 等拒绝进入 access denials：可查询、可回溯到 capture，但不创建、不删除任何资源，也不是成员不存在的证明。
+- `fetch_scim_resource` 按需补详情时先归档原始响应再登记观察，目录观察通过 capture_id 与原始响应互相追溯。
